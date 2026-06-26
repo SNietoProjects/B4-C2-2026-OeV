@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Tema 4 (Específico) — Ley 9/2017, Contratos del Sector Público | Opositar en Valencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --naranja: #d97706; --naranja-claro: #fef3c7; --naranja-borde: #f59e0b;
+    --azul-oscuro: #1e293b; --texto: #374151; --texto-suave: #6b7280;
+    --borde: #e5e7eb; --fondo: #fafaf9; --blanco: #ffffff;
+    --verde: #166534; --verde-bg: #f0fdf4; --verde-borde: #86efac;
+    --rojo: #991b1b; --rojo-bg: #fef2f2; --rojo-borde: #fca5a5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--fondo); color: var(--texto); min-height: 100vh; font-size: 16px; line-height: 1.6; }
+  header { background: var(--blanco); border-bottom: 1px solid var(--borde); }
+  .header-top { max-width: 860px; margin: 0 auto; padding: 1.4rem 1.5rem 1rem; display: flex; align-items: flex-start; gap: 1.2rem; }
+  .header-logo { width: 48px; height: 48px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }
+  .header-textos { flex: 1; }
+  .header-site { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--naranja); font-weight: 600; margin-bottom: 3px; }
+  .header-titulo { font-family: 'Lora', serif; font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 700; color: var(--azul-oscuro); line-height: 1.2; }
+  .header-sub { font-size: 0.88rem; color: var(--texto-suave); margin-top: 4px; }
+  .header-meta { background: var(--naranja-claro); border-top: 1px solid #fde68a; padding: 0.55rem 1.5rem; }
+  .header-meta-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; font-size: 0.83rem; color: #92400e; font-weight: 500; }
+  .barra-wrap { position: sticky; top: 0; z-index: 100; background: var(--blanco); border-bottom: 1px solid var(--borde); padding: 0.6rem 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .barra-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; }
+  .barra-track { flex: 1; height: 6px; background: #f3f4f6; border-radius: 99px; overflow: hidden; }
+  .barra-fill { height: 100%; background: var(--naranja); border-radius: 99px; transition: width 0.35s ease; width: 0%; }
+  .barra-num { font-size: 13px; font-weight: 600; color: var(--azul-oscuro); white-space: nowrap; min-width: 52px; }
+  .barra-score { font-size: 13px; color: var(--texto-suave); white-space: nowrap; }
+  .barra-score .ok { color: var(--verde); font-weight: 600; }
+  .barra-score .ko { color: var(--rojo); font-weight: 600; }
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+  .card { background: var(--blanco); border: 1px solid var(--borde); border-radius: 10px; padding: 1.5rem 1.6rem; margin-bottom: 1.4rem; transition: box-shadow 0.2s; }
+  .card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.06); }
+  .card-num { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--naranja); margin-bottom: 0.5rem; }
+  .card-pregunta { font-family: 'Lora', serif; font-size: 1rem; font-weight: 600; line-height: 1.55; color: var(--azul-oscuro); margin-bottom: 1.1rem; }
+  .opciones { display: flex; flex-direction: column; gap: 0.45rem; }
+  .opcion { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.7rem 1rem; border: 1.5px solid var(--borde); border-radius: 7px; cursor: pointer; background: var(--blanco); text-align: left; font-family: 'Source Sans 3', sans-serif; font-size: 0.93rem; color: var(--texto); line-height: 1.5; transition: border-color 0.15s, background 0.15s; width: 100%; }
+  .opcion:hover:not(:disabled) { border-color: var(--naranja-borde); background: var(--naranja-claro); }
+  .opcion .letra { font-weight: 700; color: var(--naranja); min-width: 18px; font-size: 0.85rem; margin-top: 2px; flex-shrink: 0; }
+  .opcion.correcta { border-color: var(--verde-borde); background: var(--verde-bg); color: var(--verde); }
+  .opcion.correcta .letra { color: #15803d; }
+  .opcion.incorrecta { border-color: var(--rojo-borde); background: var(--rojo-bg); color: var(--rojo); }
+  .opcion.incorrecta .letra { color: var(--rojo); }
+  .opcion:disabled { cursor: default; }
+  .explicacion { display: none; margin-top: 1rem; padding: 0.9rem 1rem 0.9rem 1.1rem; background: #fffbeb; border-left: 3px solid var(--naranja); border-radius: 0 6px 6px 0; font-size: 0.875rem; line-height: 1.65; color: var(--texto); }
+  .explicacion.visible { display: block; animation: fadeIn 0.22s ease; }
+  .explicacion strong { color: var(--azul-oscuro); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+  .resultado { display: none; background: var(--blanco); border: 1px solid var(--borde); border-radius: 12px; padding: 2.5rem 2rem 2rem; margin: 1.5rem 0 2rem; text-align: center; }
+  .resultado.visible { display: block; animation: fadeIn 0.3s ease; }
+  .resultado-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--naranja); font-weight: 600; margin-bottom: 0.5rem; }
+  .resultado h2 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 700; color: var(--azul-oscuro); margin-bottom: 0.3rem; }
+  .resultado-nota { font-size: 3.2rem; font-weight: 700; color: var(--azul-oscuro); line-height: 1; margin: 1rem 0 0.3rem; font-family: 'Lora', serif; }
+  .resultado-nota span { color: var(--naranja); }
+  .calif-badge { display: inline-block; padding: 5px 16px; border-radius: 99px; font-size: 0.9rem; font-weight: 600; margin: 0.6rem 0 1.5rem; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 0 0 1.5rem; }
+  .stat { background: var(--fondo); border: 1px solid var(--borde); border-radius: 8px; padding: 0.9rem 0.5rem; }
+  .stat-num { font-size: 1.9rem; font-weight: 700; font-family: 'Lora', serif; }
+  .stat-lab { font-size: 0.78rem; color: var(--texto-suave); margin-top: 2px; }
+  .resultado-hint { font-size: 0.85rem; color: var(--texto-suave); margin-bottom: 1.2rem; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0.7rem 1.6rem; border-radius: 7px; font-family: 'Source Sans 3', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.18s; }
+  .btn-naranja { background: var(--naranja); color: white; }
+  .btn-naranja:hover { background: #b45309; transform: translateY(-1px); }
+  @media (max-width: 580px) { main { padding: 1.2rem 1rem 4rem; } .card { padding: 1.1rem; } .stats { grid-template-columns: 1fr 1fr; } .header-top { padding: 1rem; gap: 0.8rem; } .header-meta { padding: 0.5rem 1rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <img class="header-logo"
+      src="https://opositorgva.wordpress.com/wp-content/uploads/2024/04/cropped-opositar-en-valencia-logo-sin-fondo.png"
+      alt="Opositar en Valencia" onerror="this.style.display='none'">
+    <div class="header-textos">
+      <div class="header-site">Opositar en Valencia · GVA · Temario específico</div>
+      <div class="header-titulo">Tema 4 — Ley 9/2017, de Contratos del Sector Público</div>
+      <div class="header-sub">Objeto y ámbito · Tipos contractuales · Contratos administrativos y privados · Expediente de contratación</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="header-meta-inner">
+      <span id="totalLabel">📋 Cargando...</span>
+      <span>🎯 Nivel medio-alto</span>
+      <span>🔀 Orden aleatorio en cada intento</span>
+      <span>✅ Explicación en cada respuesta</span>
+    </div>
+  </div>
+</header>
+
+<div class="barra-wrap">
+  <div class="barra-inner">
+    <div class="barra-track"><div class="barra-fill" id="barraFill"></div></div>
+    <span class="barra-num" id="barraNum">0 / ?</span>
+    <span class="barra-score"><span class="ok" id="scoreOk">✓ 0</span> &nbsp;<span class="ko" id="scoreKo">✗ 0</span></span>
+  </div>
+</div>
+
+<main id="mainContent"></main>
+
+<script>
+const BANCO = [
+
+  /* ══ TÍTULO PRELIMINAR — CAP. I: OBJETO Y ÁMBITO DE APLICACIÓN ══ */
+  {
+    p: "¿Cuál es el objeto de la Ley 9/2017 de Contratos del Sector Público, según su artículo 1.1?",
+    ops: [
+      "Regular exclusivamente la contratación de obras y servicios de la Administración General del Estado",
+      "Regular la contratación del sector público garantizando principios de libertad de acceso, publicidad, transparencia, no discriminación e igualdad de trato, y asegurar una eficiente utilización de los fondos mediante la selección de la oferta económicamente más ventajosa",
+      "Transponer únicamente las directivas europeas sobre concesiones de servicios al ordenamiento jurídico español",
+      "Regular el régimen de los contratos menores y su publicidad en el perfil del contratante"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 1.1 LCSP establece que su objeto es «regular la contratación del sector público, a fin de garantizar que la misma se ajusta a los principios de libertad de acceso a las licitaciones, publicidad y transparencia de los procedimientos, y no discriminación e igualdad de trato entre los licitadores», asegurando además «una eficiente utilización de los fondos destinados a la realización de obras, la adquisición de bienes y la contratación de servicios mediante la exigencia de la definición previa de las necesidades a satisfacer, la salvaguarda de la libre competencia y la selección de la oferta económicamente más ventajosa»."
+  },
+  {
+    p: "El artículo 1.3 de la Ley 9/2017 establece la incorporación de determinados criterios en toda contratación pública. ¿Cuáles son y con qué carácter?",
+    ops: [
+      "Criterios económicos y sociales, con carácter potestativo a criterio del órgano de contratación",
+      "Criterios sociales y medioambientales de manera transversal y preceptiva, siempre que guarden relación con el objeto del contrato",
+      "Criterios de sostenibilidad presupuestaria, con carácter obligatorio solo en contratos superiores a 100.000 euros",
+      "Criterios de innovación tecnológica, de carácter voluntario para los poderes adjudicadores"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 1.3 LCSP establece que «en toda contratación pública se incorporarán de manera transversal y preceptiva criterios sociales y medioambientales siempre que guarde relación con el objeto del contrato». Además, se facilitará el acceso a la contratación pública de las pequeñas y medianas empresas, así como de las empresas de economía social. La incorporación es preceptiva (obligatoria), no potestativa."
+  },
+  {
+    p: "Según el artículo 2.1 de la Ley 9/2017, ¿qué contratos del sector público están sometidos a la Ley? ¿Qué se entiende por contrato «oneroso»?",
+    ops: [
+      "Los contratos gratuitos celebrados por entidades públicas; un contrato es oneroso cuando supone un desembolso para la Administración",
+      "Los contratos onerosos, cualquiera que sea su naturaleza jurídica, celebrados por las entidades del artículo 3; un contrato tiene carácter oneroso cuando el contratista obtenga algún tipo de beneficio económico, ya sea directo o indirecto",
+      "Solo los contratos formalizados en documento administrativo por entidades que sean poder adjudicador; oneroso equivale a que se pague un precio fijo en dinero",
+      "Los contratos de cuantía superior a los umbrales europeos de regulación armonizada; oneroso es cualquier contrato que suponga gasto público"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 2.1 LCSP establece que son contratos del sector público «los contratos onerosos, cualquiera que sea su naturaleza jurídica, que celebren las entidades enumeradas en el artículo 3» y que «se entenderá que un contrato tiene carácter oneroso en los casos en que el contratista obtenga algún tipo de beneficio económico, ya sea de forma directa o indirecta». El beneficio económico puede ser indirecto (por ejemplo, derecho de explotación de un servicio)."
+  },
+  {
+    p: "El artículo 2.4 de la Ley 9/2017 establece el sistema de identificación de las prestaciones objeto de los contratos. ¿Qué vocabulario se utiliza?",
+    ops: [
+      "La Clasificación Nacional de Actividades Económicas (CNAE) aprobada por el INE",
+      "El Vocabulario común de contratos públicos (CPV), aprobado por el Reglamento (CE) n.º 2195/2002",
+      "La Clasificación Internacional de Productos y Servicios (CPC) de las Naciones Unidas",
+      "El Nomenclador de Contratos Públicos elaborado por la Junta Consultiva de Contratación del Estado"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 2.4 LCSP establece que «a los efectos de identificar las prestaciones que son objeto de los contratos regulados en esta Ley, se utilizará el «Vocabulario común de contratos públicos», aprobado por el Reglamento (CE) n.º 2195/2002 del Parlamento Europeo y del Consejo de 5 de noviembre de 2002, por el que se aprueba el Vocabulario común de contratos públicos (CPV), o normativa comunitaria que le sustituya»."
+  },
+  {
+    p: "¿Cuántos tipos de entidades integran el sector público a efectos de la Ley 9/2017, según el artículo 3.1? ¿Cuál de las siguientes opciones enumera CORRECTAMENTE las letras a) a d)?",
+    ops: [
+      "a) AGE, CC.AA., Ciudades Autónomas y Entidades Locales; b) Entidades Gestoras y Servicios Comunes de la Seguridad Social; c) Organismos Autónomos, Universidades Públicas y autoridades administrativas independientes; d) Consorcios con personalidad jurídica propia",
+      "a) Solo la AGE; b) Las CC.AA. y Entidades Locales; c) Los organismos autónomos; d) Las fundaciones públicas",
+      "a) AGE y CC.AA.; b) Entidades Locales; c) Organismos Autónomos; d) Sociedades mercantiles estatales",
+      "a) AGE, CC.AA. y Entidades Locales; b) Solo Organismos Autónomos; c) Fundaciones y mutuas; d) Consorcios"
+    ],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El art. 3.1 LCSP enumera doce letras (a a l) de entidades del sector público. Las cuatro primeras son: a) la AGE, las Administraciones de las CC.AA., las Ciudades Autónomas de Ceuta y Melilla y las Entidades que integran la Administración Local; b) las Entidades Gestoras y los Servicios Comunes de la Seguridad Social; c) los Organismos Autónomos, las Universidades Públicas y las autoridades administrativas independientes; d) los consorcios dotados de personalidad jurídica propia referenciados en la Ley 40/2015 y la legislación de régimen local."
+  },
+  {
+    p: "Las fundaciones públicas forman parte del sector público según el artículo 3.1.e) de la Ley 9/2017. ¿Cuál de los tres requisitos alternativos las define?",
+    ops: [
+      "Que tengan más del 50% de sus trabajadores procedentes del sector público, o que más de la mitad de sus actividades sean de interés general",
+      "1.º Aportación mayoritaria inicial o posterior de sector público; 2.º Que más del 50% de su patrimonio esté integrado por bienes aportados o cedidos por el sector público con carácter permanente; 3.º Que la mayoría de derechos de voto en su patronato corresponda a representantes del sector público",
+      "Que reciban subvenciones públicas superiores al 50% de su presupuesto anual, o que sean creadas por ley o norma reglamentaria",
+      "Que estén inscritas en el Registro de Fundaciones del sector público, o que tengan habilitación expresa del Ministerio competente"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 3.1.e) LCSP define las fundaciones públicas como aquellas que reúnan alguno de tres requisitos alternativos: 1.º que se constituyan con aportación mayoritaria (directa o indirecta) de sector público, o la reciban con posterioridad; 2.º que el patrimonio esté integrado en más del 50% por bienes o derechos aportados o cedidos por sector público con carácter permanente; 3.º que la mayoría de derechos de voto en el patronato corresponda a representantes del sector público. Basta con cumplir uno de los tres."
+  },
+  {
+    p: "Las sociedades mercantiles forman parte del sector público según el artículo 3.1.h) de la Ley 9/2017. ¿Cuál es el umbral de participación pública que determina su inclusión?",
+    ops: [
+      "Que la participación pública directa o indirecta sea igual o superior al 25%",
+      "Que la participación pública directa o indirecta sea superior al 50%, o que sin superar ese porcentaje se encuentren en el supuesto del art. 5 del texto refundido de la Ley del Mercado de Valores",
+      "Que la participación pública directa sea del 100%, sin admitirse participación indirecta a estos efectos",
+      "Que la participación pública supere el 33% del capital social, en cualquier modalidad"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 3.1.h) LCSP incluye las sociedades mercantiles «en cuyo capital social la participación, directa o indirecta, de entidades de las mencionadas en las letras a), b), c), d), e), g) y h) del presente apartado sea superior al 50 por 100, o en los casos en que sin superar ese porcentaje, se encuentre respecto de las referidas entidades en el supuesto previsto en el artículo 5 del texto refundido de la Ley del Mercado de Valores». La referencia al art. 5 LMV capta situaciones de control efectivo aunque la participación formal sea inferior al 50%."
+  },
+  {
+    p: "¿Cuál es el concepto clave que define a los organismos del artículo 3.1.j) de la Ley 9/2017 («organismos de derecho público»)?",
+    ops: [
+      "Entidades con personalidad jurídica que ejercen potestades administrativas propias de los poderes públicos",
+      "Entidades con personalidad jurídica propia, creadas específicamente para satisfacer necesidades de interés general que no tengan carácter industrial o mercantil, siempre que uno o varios sujetos del sector público financien mayoritariamente su actividad, controlen su gestión, o nombren a más de la mitad de los miembros de su órgano de administración, dirección o vigilancia",
+      "Entidades públicas con capital íntegramente público que no sean organismos autónomos ni entidades públicas empresariales",
+      "Cualquier entidad de derecho público creada por Ley, con independencia de si su actividad tiene carácter industrial o mercantil"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 3.1.j) LCSP define estos organismos como «cualesquiera entidades con personalidad jurídica propia, que hayan sido creadas específicamente para satisfacer necesidades de interés general que no tengan carácter industrial o mercantil, siempre que uno o varios sujetos pertenecientes al sector público financien mayoritariamente su actividad, controlen su gestión, o nombren a más de la mitad de los miembros de su órgano de administración, dirección o vigilancia». Es la definición clásica de «organismo de derecho público» del Derecho comunitario."
+  },
+  {
+    p: "Según el artículo 3.2 de la Ley 9/2017, ¿qué entidades tienen la consideración de Administraciones Públicas a efectos de la contratación?",
+    ops: [
+      "Las mencionadas en las letras a), b), c) y l) del apartado 1, más ciertos consorcios y entidades de derecho público que no se financien mayoritariamente con ingresos de mercado",
+      "Todas las entidades del artículo 3.1 sin excepción",
+      "Solo la AGE, las CC.AA. y las Entidades Locales, sin incluir organismos vinculados o dependientes",
+      "Las entidades de las letras a), b), c), d), e), f) y g) del artículo 3.1"
+    ],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El art. 3.2 LCSP establece que tienen la consideración de Administraciones Públicas: a) las mencionadas en las letras a), b), c) y l) del apartado 1; b) los consorcios y otras entidades de derecho público que, siendo poder adjudicador, estén vinculados a Administraciones Públicas o dependientes de ellas y no se financien mayoritariamente con ingresos de mercado (los que tienen la consideración de «productor de mercado» conforme al Sistema Europeo de Cuentas se excluyen)."
+  },
+  {
+    p: "El artículo 3.3 de la Ley 9/2017 define los poderes adjudicadores. ¿Cuáles son las cinco categorías?",
+    ops: [
+      "a) Administraciones Públicas; b) fundaciones públicas; c) Mutuas colaboradoras; d) organismos de derecho público (creados para satisfacer necesidades de interés general no industriales, con financiación/control/nombramiento mayoritario de poderes adjudicadores); e) asociaciones constituidas por estas entidades",
+      "a) AGE; b) CC.AA.; c) Entidades Locales; d) organismos autónomos; e) sociedades mercantiles públicas",
+      "a) Todas las entidades del art. 3.1; b) fundaciones privadas con financiación pública; c) partidos políticos; d) sindicatos; e) corporaciones de derecho público",
+      "a) Administraciones Públicas; b) organismos autónomos; c) entidades públicas empresariales; d) fundaciones públicas; e) Mutuas de la Seguridad Social"
+    ],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El art. 3.3 LCSP enumera cinco categorías de poderes adjudicadores: a) las Administraciones Públicas; b) las fundaciones públicas; c) las Mutuas colaboradoras con la Seguridad Social; d) todas las demás entidades con personalidad jurídica propia distintas de las anteriores, creadas específicamente para satisfacer necesidades de interés general no industriales ni mercantiles, con financiación mayoritaria, control de gestión o nombramiento de más de la mitad del órgano rector por poderes adjudicadores; e) las asociaciones constituidas por las entidades mencionadas en las letras anteriores."
+  },
+  {
+    p: "El artículo 3.4 de la Ley 9/2017 impone obligaciones especiales a partidos políticos, sindicatos y organizaciones empresariales cuando cumplan los requisitos para ser poder adjudicador. ¿Qué deben hacer respecto a los contratos sujetos a regulación armonizada?",
+    ops: [
+      "Deben aplicar íntegramente la Ley 9/2017 como si fueran Administraciones Públicas",
+      "Deben actuar conforme a los principios de publicidad, concurrencia, transparencia, igualdad y no discriminación, y aprobar instrucciones internas de contratación, informadas por su asesoramiento jurídico y publicadas en su web",
+      "Solo deben garantizar que los contratos se adjudican al precio de mercado, sin obligación de publicidad formal",
+      "Están exentos de cualquier obligación de contratación pública al amparo de su autonomía estatutaria"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 3.4 LCSP establece que partidos políticos, sindicatos, organizaciones empresariales y sus asociaciones vinculadas, cuando sean poder adjudicador y respecto a los contratos sujetos a regulación armonizada, «deberán actuar conforme a los principios de publicidad, concurrencia, transparencia, igualdad y no discriminación». Además, «deberán aprobar unas instrucciones internas en materia de contratación que se adecuarán a lo previsto en el párrafo anterior y a la normativa comunitaria», que deberán ser informadas por su asesoramiento jurídico antes de su aprobación y publicadas en sus páginas web."
+  },
+
+  /* ══ CAP. II — SECCIÓN 1ª: DELIMITACIÓN DE TIPOS CONTRACTUALES ══ */
+  {
+    p: "El artículo 12.1 de la Ley 9/2017 establece qué contratos se calificarán conforme a las normas de la Sección 1ª del Capítulo II. ¿Cuáles son estos contratos «nominados»?",
+    ops: [
+      "Solo los contratos de obras y concesión de obras",
+      "Los contratos de obras, concesión de obras, concesión de servicios, suministro y servicios que celebren las entidades pertenecientes al sector público",
+      "Todos los contratos del sector público, incluidos los atípicos y mixtos",
+      "Solo los contratos de obras, suministro y servicios, excluyendo las concesiones"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 12.1 LCSP establece que «los contratos de obras, concesión de obras, concesión de servicios, suministro y servicios que celebren las entidades pertenecientes al sector público se calificarán de acuerdo con las normas contenidas en la presente sección». Los restantes contratos se calificarán según las normas de derecho administrativo o de derecho privado que les sean de aplicación (art. 12.2)."
+  },
+  {
+    p: "El artículo 13.2 de la Ley 9/2017 define el concepto de «obra». ¿Qué dos acepciones recoge?",
+    ops: [
+      "La ejecución de trabajos de albañilería y la realización de infraestructuras viarias",
+      "El resultado de un conjunto de trabajos de construcción o ingeniería civil, destinado a cumplir por sí mismo una función económica o técnica, que tenga por objeto un bien inmueble; y también la realización de trabajos que modifiquen la forma o sustancia del terreno o de su vuelo, o de mejora del medio físico o natural",
+      "Cualquier actividad que suponga una transformación del espacio físico, con independencia de si se trata de un bien mueble o inmueble",
+      "Solo las obras de nueva construcción de edificios; las obras de rehabilitación se consideran contratos de servicios"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 13.2 LCSP define «obra» con dos acepciones: 1.ª «el resultado de un conjunto de trabajos de construcción o de ingeniería civil, destinado a cumplir por sí mismo una función económica o técnica, que tenga por objeto un bien inmueble»; 2.ª «también se considerará «obra» la realización de trabajos que modifiquen la forma o sustancia del terreno o de su vuelo, o de mejora del medio físico o natural»."
+  },
+  {
+    p: "El artículo 13.3 de la Ley 9/2017 establece la regla general de los contratos de obras. ¿A qué debe referirse el contrato?",
+    ops: [
+      "A una parte claramente delimitada de la obra, aunque no sea susceptible de utilización independiente",
+      "A una obra completa, entendiendo por ésta la susceptible de ser entregada al uso general o al servicio correspondiente, comprendiendo todos y cada uno de los elementos precisos para su utilización",
+      "Solo a las obras incluidas en proyectos aprobados por el órgano de contratación dentro del presupuesto anual",
+      "A cualquier trabajo de construcción, sin necesidad de que sea completo, siempre que el importe sea superior a 50.000 euros"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 13.3 LCSP establece que «los contratos de obras se referirán a una obra completa, entendiendo por esta la susceptible de ser entregada al uso general o al servicio correspondiente, sin perjuicio de las ampliaciones de que posteriormente pueda ser objeto y comprenderá todos y cada uno de los elementos que sean precisos para la utilización de la obra». Solo excepcionalmente pueden contratarse partes independientes, con autorización del órgano de contratación."
+  },
+  {
+    p: "El artículo 14 de la Ley 9/2017 regula el contrato de concesión de obras. ¿En qué consiste la contraprestación a favor del concesionario?",
+    ops: [
+      "Siempre en un precio fijo pagado por la Administración al finalizar la obra",
+      "En el derecho a explotar la obra (en el sentido del apartado 4) o en dicho derecho acompañado del de percibir un precio",
+      "Solo en el cobro de tarifas a los usuarios finales de la obra concesionada",
+      "En la adquisición de la propiedad de la obra al término del período concesional"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 14.1 LCSP establece que en la concesión de obras «la contraprestación a favor de aquel consiste, o bien únicamente en el derecho a explotar la obra en el sentido del apartado cuarto siguiente, o bien en dicho derecho acompañado del de percibir un precio». La clave es el derecho de explotación; la percepción de un precio por la Administración es complementaria, no exclusiva."
+  },
+  {
+    p: "El artículo 14.4 de la Ley 9/2017 establece el elemento definitorio de la concesión de obras. ¿Cuál es?",
+    ops: [
+      "Que la duración del contrato sea superior a cinco años",
+      "Que el concesionario asuma un riesgo operacional en la explotación de las obras, abarcando el riesgo de demanda o el de suministro, o ambos",
+      "Que el importe del contrato supere los umbrales de regulación armonizada",
+      "Que la Administración concedente conserve la propiedad de la obra durante toda la concesión"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 14.4 LCSP establece que el derecho de explotación «deberá implicar la transferencia al concesionario de un riesgo operacional en la explotación de dichas obras abarcando el riesgo de demanda o el de suministro, o ambos». Sin transferencia del riesgo operacional, no hay concesión de obras, sino otro tipo contractual. El concesionario asume riesgo operacional cuando no esté garantizada la recuperación de sus inversiones ni la cobertura de sus costes en condiciones normales."
+  },
+  {
+    p: "¿Qué diferencia esencial existe entre el riesgo de demanda y el riesgo de suministro en las concesiones, según el artículo 14.4 de la Ley 9/2017?",
+    ops: [
+      "El riesgo de demanda es el financiero y el de suministro es el técnico-constructivo",
+      "El riesgo de demanda se debe a la demanda real de las obras o servicios; el riesgo de suministro es el relativo al suministro de las obras o servicios (en particular, que la prestación no se ajuste a la demanda)",
+      "El riesgo de demanda lo asume siempre la Administración; el de suministro, siempre el concesionario",
+      "Son sinónimos y se usan indistintamente en la Ley para referirse al mismo concepto"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 14.4 LCSP distingue: «se entiende por riesgo de demanda el que se debe a la demanda real de las obras o servicios objeto del contrato» y «riesgo de suministro el relativo al suministro de las obras o servicios objeto del contrato, en particular el riesgo de que la prestación de los servicios no se ajuste a la demanda». El riesgo de demanda es el riesgo de que haya pocos usuarios; el riesgo de suministro es el riesgo de que no se pueda prestar el servicio adecuadamente."
+  },
+  {
+    p: "El artículo 15 de la Ley 9/2017 define el contrato de concesión de servicios. ¿Qué elemento lo distingue del contrato de servicios ordinario?",
+    ops: [
+      "El importe del contrato, que en la concesión debe superar los 750.000 euros",
+      "Que en la concesión el poder adjudicador gestiona el servicio directamente, mientras que en el contrato de servicios lo hace el contratista",
+      "Que la contraprestación es el derecho a explotar los servicios (con o sin precio), lo que implica la transferencia al concesionario del riesgo operacional",
+      "Que en la concesión el servicio tiene naturaleza monopolística, mientras que en el contrato de servicios existe libre competencia"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El art. 15 LCSP establece que en la concesión de servicios «cuya contrapartida venga constituida bien por el derecho a explotar los servicios objeto del contrato o bien por dicho derecho acompañado del de percibir un precio» y que «el derecho de explotación de los servicios implicará la transferencia al concesionario del riesgo operacional». La diferencia clave con el contrato de servicios ordinario es que en la concesión el concesionario asume el riesgo operacional de la explotación; en el contrato de servicios, la Administración paga un precio y no hay traslado de ese riesgo."
+  },
+  {
+    p: "El artículo 16.1 de la Ley 9/2017 define el contrato de suministro. ¿Qué modalidades incluye?",
+    ops: [
+      "Solo la adquisición en firme de bienes muebles nuevos",
+      "La adquisición, el arrendamiento financiero, o el arrendamiento con o sin opción de compra, de productos o bienes muebles",
+      "La adquisición de bienes muebles e inmuebles, con cualquier modalidad de pago",
+      "La compraventa de bienes muebles y la prestación de servicios relacionados con dichos bienes"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 16.1 LCSP define los contratos de suministro como «los que tienen por objeto la adquisición, el arrendamiento financiero, o el arrendamiento, con o sin opción de compra, de productos o bienes muebles». Incluye tres modalidades básicas: adquisición directa, arrendamiento financiero (leasing) y arrendamiento ordinario (con o sin opción de compra)."
+  },
+  {
+    p: "El artículo 16.2 de la Ley 9/2017 excluye del contrato de suministro ciertos contratos. ¿Cuáles, con qué excepción?",
+    ops: [
+      "Los contratos de obras, excepto cuando incluyan la instalación de los bienes suministrados",
+      "Los contratos relativos a propiedades incorporales o valores negociables, salvo los que tengan por objeto programas de ordenador (que sí son suministro según la letra b del apartado 3)",
+      "Los contratos de arrendamiento de inmuebles, con excepción de los de equipos informáticos",
+      "Los contratos de concesión de servicios que incluyan el suministro de bienes como prestación accesoria"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 16.2 LCSP establece que «no tendrán la consideración de contrato de suministro los contratos relativos a propiedades incorporales o valores negociables». Sin embargo, hay una excepción: «sin perjuicio de lo dispuesto en la letra b) del apartado 3 de este artículo respecto de los contratos que tengan por objeto programas de ordenador», que sí se consideran suministro cuando incluyen adquisición o arrendamiento de equipos y cesión del derecho de uso (pero no los programas desarrollados a medida, que son servicios)."
+  },
+  {
+    p: "Según el artículo 16.3.c) de la Ley 9/2017, ¿qué son los contratos de fabricación?",
+    ops: [
+      "Contratos en los que el empresario elabora bienes estándar en serie para su posterior entrega a la Administración",
+      "Contratos en los que la cosa o cosas que hayan de ser entregadas por el empresario deban ser elaboradas con arreglo a características peculiares fijadas previamente por la entidad contratante, aun cuando esta se obligue a aportar los materiales",
+      "Contratos en los que la Administración fabrica por sí misma los bienes necesarios para la prestación de un servicio",
+      "Contratos que tienen por objeto el montaje o ensamblaje de componentes previamente adquiridos por la Administración"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 16.3.c) LCSP define los contratos de fabricación como aquellos «por los que la cosa o cosas que hayan de ser entregadas por el empresario deban ser elaboradas con arreglo a características peculiares fijadas previamente por la entidad contratante, aun cuando esta se obligue a aportar, total o parcialmente, los materiales precisos». La clave es que el objeto se elabora siguiendo especificaciones previas de la Administración."
+  },
+  {
+    p: "El artículo 17 de la Ley 9/2017 define el contrato de servicios. ¿Qué prestaciones quedan excluidas de este tipo contractual?",
+    ops: [
+      "Las prestaciones que tengan por objeto actividades culturales o artísticas",
+      "Los servicios que impliquen ejercicio de la autoridad inherente a los poderes públicos",
+      "Las prestaciones de servicios financieros y los servicios de suscripción a publicaciones",
+      "Los servicios de asistencia jurídica prestados por colegios de abogados"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 17 LCSP define los contratos de servicios como aquellos «cuyo objeto son prestaciones de hacer consistentes en el desarrollo de una actividad o dirigidas a la obtención de un resultado distinto de una obra o suministro» y añade que «no podrán ser objeto de estos contratos los servicios que impliquen ejercicio de la autoridad inherente a los poderes públicos». El ejercicio de potestades públicas no puede externalizarse mediante contrato."
+  },
+  {
+    p: "El artículo 18 de la Ley 9/2017 regula los contratos mixtos. ¿Cuál es la regla general para determinar las normas aplicables a la adjudicación cuando el contrato comprende prestaciones de dos o más contratos de obras, suministros o servicios?",
+    ops: [
+      "Se aplican las normas del contrato de mayor importe económico",
+      "Se aplican las normas del contrato de mayor dificultad técnica de ejecución",
+      "Se atiende al carácter de la prestación principal",
+      "Se aplican todas las normas de los tipos contractuales presentes de forma acumulativa"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El art. 18.1.a) LCSP establece que «cuando un contrato mixto comprenda prestaciones propias de dos o más contratos de obras, suministros o servicios se atenderá al carácter de la prestación principal». Esta regla de la «prestación principal» es el criterio general. En el caso de contratos mixtos de servicios especiales del Anexo IV con otros servicios, o de servicios con suministros, el objeto principal se determina por el mayor valor estimado."
+  },
+  {
+    p: "Según el artículo 18.3 de la Ley 9/2017, ¿cuándo es obligatorio elaborar un proyecto en un contrato mixto que contenga una obra?",
+    ops: [
+      "Siempre que el contrato mixto incluya una obra como elemento accesorio",
+      "Cuando el elemento de obra supere los 50.000 euros, debiendo tramitarse conforme a los artículos 231 y siguientes",
+      "Solo cuando la obra sea la prestación principal del contrato mixto",
+      "Únicamente cuando la obra requiera proyecto de arquitectura e ingeniería simultáneamente"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 18.3 LCSP establece que «en los casos en que un elemento del contrato mixto sea una obra y esta supere los 50.000 euros, deberá elaborarse un proyecto y tramitarse de conformidad con los artículos 231 y siguientes de la presente Ley». El umbral de 50.000 euros es importante: por debajo, puede no requerirse proyecto (salvo que las disposiciones vigentes lo exijan por otra razón)."
+  },
+
+  /* ══ CAP. II — SECCIÓN 3ª: CONTRATOS ADMINISTRATIVOS Y CONTRATOS PRIVADOS ══ */
+  {
+    p: "El artículo 24 de la Ley 9/2017 enuncia el principio general sobre el régimen jurídico. ¿Qué dispone?",
+    ops: [
+      "Que todos los contratos del sector público tienen carácter administrativo, con independencia del sujeto contratante",
+      "Que los contratos del sector público podrán estar sometidos a un régimen jurídico de derecho administrativo o de derecho privado",
+      "Que los contratos de las Administraciones Públicas son siempre administrativos y los del resto del sector público, siempre privados",
+      "Que el régimen jurídico lo determina el tipo de contrato, independientemente de quién lo celebre"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 24 LCSP es escueto y establece simplemente que «los contratos del sector público podrán estar sometidos a un régimen jurídico de derecho administrativo o de derecho privado». Esta dualidad se concreta en los arts. 25 (contratos administrativos) y 26 (contratos privados)."
+  },
+  {
+    p: "Según el artículo 25.1.a) de la Ley 9/2017, los contratos de obra, concesión de obra, concesión de servicios, suministro y servicios celebrados por una Administración Pública tienen carácter administrativo. Sin embargo, hay excepciones. ¿Cuáles son los dos supuestos de contratos de estos tipos que tienen carácter privado?",
+    ops: [
+      "1.º Los contratos de servicios financieros (CPV 66100000-1 a 66720000-3) y los de creación e interpretación artística, literaria y espectáculos (CPV 79995000-5 a 79995200-7 y 92000000-1 a 92700000-8, con excepciones); 2.º Los de suscripción a revistas, publicaciones periódicas y bases de datos",
+      "1.º Los contratos de servicios tecnológicos y de telecomunicaciones; 2.º Los contratos de suministro de energía",
+      "1.º Los contratos de servicios de limpieza y mantenimiento de edificios; 2.º Los contratos de mensajería y correos",
+      "1.º Los contratos de obras de importe inferior a 40.000 euros; 2.º Los contratos de suministro de material de oficina"
+    ],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El art. 25.1.a) LCSP establece que, aunque la regla general es que los cinco tipos nominados celebrados por Administraciones Públicas son administrativos, tendrán carácter privado: 1.º los contratos de servicios financieros (CPV 66100000-1 a 66720000-3) y los de creación artística/literaria/espectáculos (CPV 79995000-5 a 79995200-7 y 92000000-1 a 92700000-8, excepto 92230000-2, 92231000-9 y 92232000-6); y 2.º los contratos de suscripción a revistas, publicaciones periódicas y bases de datos."
+  },
+  {
+    p: "El artículo 25.1.b) de la Ley 9/2017 establece la categoría de «contratos administrativos especiales». ¿Cuáles son?",
+    ops: [
+      "Los contratos de importe superior a 1.000.000 de euros que no estén incluidos en los tipos nominados",
+      "Los contratos declarados expresamente como administrativos por una Ley, y aquellos de objeto distinto a los tipos nominados pero con naturaleza administrativa especial por estar vinculados al giro o tráfico específico de la Administración o por satisfacer directamente una finalidad pública de la específica competencia de aquella",
+      "Los contratos de colaboración público-privada y los de concesión de dominio público",
+      "Los contratos de asistencia técnica celebrados con consultoras externas para el diseño de políticas públicas"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 25.1.b) LCSP establece que también son contratos administrativos «los contratos declarados así expresamente por una Ley, y aquellos otros de objeto distinto a los expresados en la letra anterior, pero que tengan naturaleza administrativa especial por estar vinculados al giro o tráfico específico de la Administración contratante o por satisfacer de forma directa o inmediata una finalidad pública de la específica competencia de aquella». Son los llamados «contratos administrativos especiales» o «atípicos»."
+  },
+  {
+    p: "Según el artículo 25.2 de la Ley 9/2017, ¿qué derecho rige los contratos administrativos en cuanto a su preparación, adjudicación, efectos, modificación y extinción?",
+    ops: [
+      "El derecho privado en todo caso, con aplicación supletoria del Derecho Administrativo",
+      "La Ley 9/2017 y sus disposiciones de desarrollo; supletoriamente las restantes normas de derecho administrativo y, en su defecto, el derecho privado. Para los contratos administrativos especiales (letra b), se aplican en primer término sus normas específicas",
+      "El Código Civil como derecho común, con prevalencia de la Ley 9/2017 cuando exista contradicción",
+      "Exclusivamente la Ley 9/2017, sin aplicación supletoria de ningún otro ordenamiento"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 25.2 LCSP establece que «los contratos administrativos se regirán, en cuanto a su preparación, adjudicación, efectos, modificación y extinción, por esta Ley y sus disposiciones de desarrollo; supletoriamente se aplicarán las restantes normas de derecho administrativo y, en su defecto, las normas de derecho privado». Para los contratos administrativos especiales (letra b) les serán de aplicación «en primer término, sus normas específicas»."
+  },
+  {
+    p: "El artículo 26.1 de la Ley 9/2017 enumera tres supuestos de contratos privados. ¿Cuáles son?",
+    ops: [
+      "a) Los de objeto distinto a los tipos nominados, celebrados por Administraciones Públicas; b) los celebrados por poderes adjudicadores que no sean Administraciones Públicas; c) los celebrados por entidades del sector público que no reúnan la condición de poder adjudicador",
+      "a) Todos los contratos de servicios; b) los contratos de suministro de valor inferior a 15.000 euros; c) los contratos de obras celebrados por fundaciones públicas",
+      "a) Los contratos de derecho mercantil celebrados por el sector público; b) los contratos laborales; c) los contratos de colaboración con organizaciones sin ánimo de lucro",
+      "a) Los contratos de las sociedades mercantiles públicas; b) los contratos de las entidades públicas empresariales; c) los convenios de colaboración"
+    ],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El art. 26.1 LCSP establece tres supuestos de contratos privados: a) los que celebren las Administraciones Públicas cuyo objeto sea distinto de los referidos en las letras a) y b) del apartado primero del artículo 25 (es decir, de objeto diferente a los tipos nominados y a los administrativos especiales); b) los celebrados por entidades del sector público que siendo poder adjudicador no reúnan la condición de Administraciones Públicas; c) los celebrados por entidades del sector público que no reúnan la condición de poder adjudicador."
+  },
+  {
+    p: "Según el artículo 26.2 de la Ley 9/2017, ¿qué normas rigen los contratos privados de las Administraciones Públicas en cuanto a su preparación y adjudicación, y en cuanto a sus efectos, modificación y extinción?",
+    ops: [
+      "Preparación y adjudicación: íntegramente el derecho privado. Efectos y extinción: la Ley 9/2017",
+      "Preparación y adjudicación: las Secciones 1ª y 2ª del Capítulo I del Título I del Libro Segundo de la LCSP (con carácter general), con aplicación supletoria del derecho administrativo o privado. Efectos, modificación y extinción: el derecho privado",
+      "Preparación, adjudicación, efectos y extinción: íntegramente el derecho privado, con aplicación supletoria de la LCSP",
+      "Preparación y adjudicación: solo las normas autonómicas de contratación. Efectos y extinción: el Código Civil"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 26.2 LCSP establece que los contratos privados de las Administraciones Públicas se regirán, «en cuanto a su preparación y adjudicación, en defecto de normas específicas, por las Secciones 1.ª y 2.ª del Capítulo I del Título I del Libro Segundo de la presente Ley con carácter general, y por sus disposiciones de desarrollo, aplicándose supletoriamente las restantes normas de derecho administrativo o, en su caso, las normas de derecho privado». En cuanto a «sus efectos, modificación y extinción, estos contratos se regirán por el derecho privado»."
+  },
+  {
+    p: "El artículo 27.1 de la Ley 9/2017 atribuye la competencia al orden jurisdiccional contencioso-administrativo para determinadas cuestiones. ¿Cuáles incluye la letra a) respecto a los contratos administrativos?",
+    ops: [
+      "Solo las cuestiones relativas a la adjudicación de los contratos administrativos",
+      "Las relativas a la preparación, adjudicación, efectos, modificación y extinción de los contratos administrativos",
+      "Únicamente la impugnación de los pliegos de cláusulas administrativas y de prescripciones técnicas",
+      "Solo las cuestiones surgidas con posterioridad a la formalización del contrato"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.1.a) LCSP atribuye al orden jurisdiccional contencioso-administrativo «las relativas a la preparación, adjudicación, efectos, modificación y extinción de los contratos administrativos». Es decir, toda la vida del contrato administrativo es competencia de la jurisdicción contencioso-administrativa."
+  },
+  {
+    p: "Según el artículo 27.1.b) de la Ley 9/2017, ¿qué cuestiones de los contratos privados de las Administraciones Públicas son competencia del orden contencioso-administrativo?",
+    ops: [
+      "Todas las cuestiones relativas a efectos y extinción de los contratos privados de las Administraciones Públicas",
+      "Las que se susciten en relación con la preparación y adjudicación de los contratos privados de las Administraciones Públicas",
+      "Solo las cuestiones relativas a la resolución del contrato privado",
+      "Las cuestiones relativas a la ejecución del contrato privado cuando éste supere los umbrales de regulación armonizada"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.1.b) LCSP atribuye al orden contencioso-administrativo «las que se susciten en relación con la preparación y adjudicación de los contratos privados de las Administraciones Públicas». En cambio, los efectos y extinción de esos mismos contratos privados son competencia del orden jurisdiccional civil (art. 27.2.a)."
+  },
+  {
+    p: "Según el artículo 27.2 de la Ley 9/2017, ¿qué cuestiones son competencia del orden jurisdiccional civil?",
+    ops: [
+      "Las relativas a preparación y adjudicación de todos los contratos del sector público",
+      "Las controversias entre las partes sobre efectos y extinción de los contratos privados de poderes adjudicadores (sean o no Administraciones Públicas); efectos y extinción de contratos de entidades sin condición de poder adjudicador; y cuestiones sobre financiación privada de concesiones de obras o servicios (excepto las potestades administrativas de la Administración concedente)",
+      "Solo las cuestiones sobre ejecución de contratos de obras de las Administraciones Públicas",
+      "Las cuestiones relativas a la subcontratación en todos los contratos del sector público"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.2 LCSP atribuye al orden civil: a) las controversias entre las partes sobre efectos y extinción de los contratos privados de poderes adjudicadores (sean o no Administraciones Públicas), excepto ciertas modificaciones contractuales; b) cuestiones sobre efectos y extinción de contratos de entidades del sector público sin condición de poder adjudicador; c) cuestiones litigiosas sobre la financiación privada de concesiones de obras o servicios, salvo las actuaciones en ejercicio de obligaciones y potestades administrativas (que son competencia contencioso-administrativa)."
+  },
+
+  /* ══ LIBRO II — TÍTULO I — CAP. I — SECCIÓN 1ª — SUBSECCIÓN 1ª: EXPEDIENTE DE CONTRATACIÓN ══ */
+  {
+    p: "Según el artículo 116.1 de la Ley 9/2017, ¿cómo se inicia el expediente de contratación y dónde debe publicarse?",
+    ops: [
+      "Lo inicia el Ministerio de Hacienda mediante resolución de inicio y se publica en el BOE",
+      "Lo inicia el órgano de contratación motivando la necesidad del contrato conforme al artículo 28, y debe publicarse en el perfil de contratante",
+      "Lo inicia el órgano de contratación y se notifica únicamente a los licitadores potenciales identificados",
+      "Lo inicia el órgano superior jerárquico del órgano de contratación y se publica en el DOUE cuando supere umbrales armonizados"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 116.1 LCSP establece que «la celebración de contratos por parte de las Administraciones Públicas requerirá la previa tramitación del correspondiente expediente, que se iniciará por el órgano de contratación motivando la necesidad del contrato en los términos previstos en el artículo 28 de esta Ley y que deberá ser publicado en el perfil de contratante». La motivación de la necesidad y la publicación en el perfil de contratante son dos requisitos esenciales desde el inicio."
+  },
+  {
+    p: "El artículo 116.1 de la Ley 9/2017 prevé una obligación específica cuando el contrato requiere cesión de datos. ¿Cuál es?",
+    ops: [
+      "Obtener la autorización previa de la Agencia Española de Protección de Datos antes de iniciar el expediente",
+      "El órgano de contratación deberá especificar en el expediente cuál será la finalidad del tratamiento de los datos que vayan a ser cedidos al contratista",
+      "Solicitar el consentimiento expreso de los ciudadanos afectados mediante publicación en el BOE",
+      "Contratar con empresas certificadas en materia de protección de datos con sello ISO 27001"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 116.1 in fine LCSP establece que «en aquellos contratos cuya ejecución requiera de la cesión de datos por parte de entidades del sector público al contratista, el órgano de contratación en todo caso deberá especificar en el expediente de contratación cuál será la finalidad del tratamiento de los datos que vayan a ser cedidos». Es una exigencia de transparencia en materia de protección de datos."
+  },
+  {
+    p: "El artículo 116.2 de la Ley 9/2017 establece una regla sobre el objeto del expediente. ¿A qué debe referirse?",
+    ops: [
+      "A la primera anualidad del contrato, previendo las extensiones mediante modificados posteriores",
+      "A la totalidad del objeto del contrato, sin perjuicio de lo previsto para los contratos adjudicados por lotes",
+      "Solo a las prestaciones principales, excluyendo las accesorias que se liciten por separado",
+      "Al periodo mínimo de ejecución, sin limitación para las prórrogas opcionales previstas"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 116.2 LCSP establece que «el expediente deberá referirse a la totalidad del objeto del contrato, sin perjuicio de lo previsto en el apartado 7 del artículo 99 para los contratos adjudicados por lotes». Esta regla evita el fraccionamiento artificial del objeto del contrato para eludir los procedimientos más exigentes o los umbrales de regulación armonizada."
+  },
+  {
+    p: "¿Qué documentación debe incorporarse al expediente de contratación según el artículo 116.3 de la Ley 9/2017?",
+    ops: [
+      "Solo el certificado de existencia de crédito y la fiscalización previa de la Intervención",
+      "El pliego de cláusulas administrativas particulares y el de prescripciones técnicas (o sus sustitutos en diálogo competitivo y acuerdos marco), el certificado de existencia de crédito o documento equivalente, y la fiscalización previa de la intervención",
+      "Únicamente los pliegos de cláusulas administrativas y de prescripciones técnicas",
+      "El informe de necesidad, el certificado de crédito y el proyecto técnico en todo caso"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 116.3 LCSP establece que al expediente se incorporarán: a) el pliego de cláusulas administrativas particulares y el de prescripciones técnicas (o el documento descriptivo en diálogo competitivo, o el documento de licitación en acuerdos marco); b) el certificado de existencia de crédito o, en entidades con presupuesto estimativo, documento equivalente que acredite financiación; c) la fiscalización previa de la intervención, en su caso."
+  },
+  {
+    p: "El artículo 116.4 de la Ley 9/2017 enumera los extremos que deben justificarse adecuadamente en el expediente. ¿Cuál de las siguientes NO figura en ese listado (letras a a g)?",
+    ops: [
+      "La elección del procedimiento de licitación",
+      "El valor estimado del contrato con indicación de todos los conceptos que lo integran, incluyendo los costes laborales",
+      "La solvencia económica del órgano de contratación para hacer frente al pago del contrato",
+      "La decisión de no dividir en lotes el objeto del contrato, en su caso"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El art. 116.4 LCSP enumera siete extremos a justificar: a) elección del procedimiento de licitación; b) clasificación exigida a los participantes; c) criterios de solvencia y criterios de adjudicación y condiciones especiales de ejecución; d) valor estimado del contrato con todos sus conceptos, incluidos costes laborales; e) necesidad de la Administración y su relación directa, clara y proporcional con el objeto del contrato; f) en contratos de servicios, el informe de insuficiencia de medios; g) decisión de no dividir en lotes. La solvencia del órgano de contratación no figura en este listado."
+  },
+  {
+    p: "El artículo 116.4.f) de la Ley 9/2017 exige justificar en el expediente un informe específico. ¿En qué tipo de contrato?",
+    ops: [
+      "En los contratos de obras de importe superior a 1.000.000 de euros",
+      "En los contratos de servicios, el informe de insuficiencia de medios",
+      "En todos los contratos que superen los umbrales de regulación armonizada",
+      "En los contratos de suministro de bienes tecnológicos, el informe de evaluación técnica"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 116.4.f) LCSP exige que en el expediente se justifique «en los contratos de servicios, el informe de insuficiencia de medios». Este informe acredita que la Administración no dispone de medios propios suficientes para realizar la prestación, justificando así la necesidad de acudir al mercado. Es específico de los contratos de servicios."
+  },
+  {
+    p: "Según el artículo 116.4.e) de la Ley 9/2017, ¿cómo debe ser la relación entre la necesidad de la Administración y el objeto del contrato?",
+    ops: [
+      "Razonable y justificada, con referencia a la planificación estratégica de la Administración",
+      "Directa, clara y proporcional",
+      "Técnicamente fundamentada y económicamente valorada en el estudio de viabilidad",
+      "Coherente con el plan anual de contratación aprobado por el órgano de gobierno"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 116.4.e) LCSP establece que en el expediente se justificará «la necesidad de la Administración a la que se pretende dar satisfacción mediante la contratación de las prestaciones correspondientes; y su relación con el objeto del contrato, que deberá ser directa, clara y proporcional». Son tres adjetivos acumulativos: directa, clara y proporcional."
+  },
+  {
+    p: "El artículo 117.1 de la Ley 9/2017 regula la aprobación del expediente. ¿Qué implica la resolución motivada que aprueba el expediente?",
+    ops: [
+      "Solo la autorización para iniciar el procedimiento de licitación, sin efecto sobre el presupuesto",
+      "La aprobación del expediente y la apertura del procedimiento de adjudicación; dicha resolución implica también la aprobación del gasto (salvo excepciones), y debe publicarse en el perfil de contratante",
+      "La adjudicación provisional del contrato al licitador que hubiera presentado oferta económicamente más ventajosa",
+      "El compromiso de pago a los futuros subcontratistas designados por el adjudicatario"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 117.1 LCSP establece que «completado el expediente de contratación, se dictará resolución motivada por el órgano de contratación aprobando el mismo y disponiendo la apertura del procedimiento de adjudicación. Dicha resolución implicará también la aprobación del gasto, salvo en el supuesto excepcional de que el presupuesto no hubiera podido ser establecido previamente, o que las normas de desconcentración o el acto de delegación hubiesen establecido lo contrario». Esta resolución debe publicarse en el perfil de contratante."
+  },
+  {
+    p: "El artículo 117.2 de la Ley 9/2017 permite ultimar expedientes de contratación incluso con adjudicación, antes de iniciar la ejecución. ¿En qué supuesto?",
+    ops: [
+      "Solo cuando el contrato sea de tramitación urgente o de emergencia",
+      "Cuando su ejecución, ya sea en una o varias anualidades, deba iniciarse en el ejercicio siguiente, pudiendo comprometerse créditos con las limitaciones de las normas presupuestarias",
+      "Solo cuando exista autorización expresa del Tribunal de Cuentas para comprometer gastos plurianuales",
+      "Cuando el contrato tenga por objeto obras de interés general declaradas prioritarias por el Gobierno"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 117.2 LCSP permite que «los expedientes de contratación podrán ultimarse incluso con la adjudicación y formalización del correspondiente contrato, aun cuando su ejecución, ya se realice en una o en varias anualidades, deba iniciarse en el ejercicio siguiente. A estos efectos podrán comprometerse créditos con las limitaciones que se determinen en las normas presupuestarias de las distintas Administraciones Públicas sujetas a esta Ley». Son los llamados «expedientes de contratación anticipada»."
+  },
+  {
+    p: "El artículo 118.1 de la Ley 9/2017 define los contratos menores. ¿Cuáles son los umbrales de valor estimado?",
+    ops: [
+      "Obras: inferior a 18.000 euros; Suministros y servicios: inferior a 6.000 euros",
+      "Obras: inferior a 40.000 euros; Suministros y servicios: inferior a 15.000 euros",
+      "Obras: inferior a 50.000 euros; Suministros y servicios: inferior a 18.000 euros",
+      "Obras: inferior a 30.000 euros; Suministros y servicios: inferior a 12.000 euros"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 118.1 LCSP establece que «se consideran contratos menores los contratos de valor estimado inferior a 40.000 euros, cuando se trate de contratos de obras, o a 15.000 euros, cuando se trate de contratos de suministro o de servicios». Estos son los umbrales generales, sin perjuicio de lo dispuesto para obras, servicios y suministros centralizados en el ámbito estatal."
+  },
+  {
+    p: "El artículo 118.2 de la Ley 9/2017 exige para los contratos menores la emisión de un informe del órgano de contratación. ¿Qué debe justificar ese informe?",
+    ops: [
+      "La capacidad técnica del contratista y su solvencia económica",
+      "De manera motivada, la necesidad del contrato y que no se está alterando su objeto con el fin de evitar la aplicación de los umbrales",
+      "La imposibilidad de adjudicar el contrato por procedimiento abierto por razones de urgencia",
+      "La idoneidad del precio ofertado en relación con los precios de mercado"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 118.2 LCSP establece que en los contratos menores «la tramitación del expediente exigirá la emisión de un informe del órgano de contratación justificando de manera motivada la necesidad del contrato y que no se está alterando su objeto con el fin de evitar la aplicación de los umbrales descritos en el apartado anterior». Este informe es la garantía frente al fraccionamiento artificial de contratos."
+  },
+  {
+    p: "El artículo 118.4 de la Ley 9/2017 establece requisitos adicionales para los contratos menores de obras. ¿Cuáles son?",
+    ops: [
+      "La presentación de al menos tres ofertas y la aprobación del presupuesto por el Pleno del ayuntamiento",
+      "El presupuesto de las obras; y si el trabajo afecta a la estabilidad, seguridad o estanqueidad de la obra, el informe de las oficinas o unidades de supervisión del artículo 235",
+      "El proyecto técnico completo y el estudio de seguridad y salud, en todo caso",
+      "La publicación en el DOUE y la apertura de un plazo mínimo de quince días para presentar ofertas"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 118.4 LCSP establece que «en el contrato menor de obras, deberá añadirse, además, el presupuesto de las obras, sin perjuicio de que deba existir el correspondiente proyecto cuando sea requerido por las disposiciones vigentes. Deberá igualmente solicitarse el informe de las oficinas o unidades de supervisión a que se refiere el artículo 235 cuando el trabajo afecte a la estabilidad, seguridad o estanqueidad de la obra»."
+  },
+  {
+    p: "El artículo 118.5 de la Ley 9/2017 exime del informe del artículo 118.2 en ciertos pagos. ¿En qué supuesto y con qué límite económico?",
+    ops: [
+      "Contratos pagados con cargo a fondos propios de la entidad, hasta 3.000 euros",
+      "Contratos cuyo pago se verifique a través del sistema de anticipos de caja fija u otro similar para pagos menores, siempre que el valor estimado no exceda de 5.000 euros",
+      "Contratos de suministro de material de oficina, hasta 2.000 euros, con cualquier modalidad de pago",
+      "Todos los contratos menores de servicios de importe inferior a 1.000 euros"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 118.5 LCSP establece que el informe del apartado 2 «no será de aplicación en aquellos contratos cuyo pago se verifique a través del sistema de anticipos de caja fija u otro similar para realizar pagos menores, siempre y cuando el valor estimado del contrato no exceda de 5.000 euros». El anticipo de caja fija es un sistema de habilitación de fondos para atender gastos menores y urgentes de forma ágil."
+  },
+  {
+    p: "El artículo 119 de la Ley 9/2017 regula la tramitación urgente del expediente. ¿Qué supuestos la justifican y qué requisito formal exige la declaración de urgencia?",
+    ops: [
+      "Los contratos de obras de importe superior a 1.000.000 de euros; la declaración la dicta el Consejo de Ministros",
+      "Contratos cuya celebración responda a una necesidad inaplazable o cuya adjudicación sea preciso acelerar por razones de interés público; el expediente debe contener la declaración de urgencia hecha por el órgano de contratación, debidamente motivada",
+      "Solo los contratos de emergencia declarados por el Gobierno; la declaración requiere informe favorable del Consejo de Estado",
+      "Cualquier contrato cuyo plazo de inicio de ejecución sea inferior a treinta días; la declaración la realiza la Intervención General"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 119.1 LCSP establece que podrán tramitarse urgentemente «los expedientes correspondientes a los contratos cuya celebración responda a una necesidad inaplazable o cuya adjudicación sea preciso acelerar por razones de interés público», y que «el expediente deberá contener la declaración de urgencia hecha por el órgano de contratación, debidamente motivada»."
+  },
+  {
+    p: "En los expedientes urgentes, el artículo 119.2.a) de la Ley 9/2017 establece un plazo reducido para que los órganos intervinientes emitan informes. ¿Cuál es el plazo ordinario y el extraordinario?",
+    ops: [
+      "Ordinario: tres días; Extraordinario: cinco días, si la complejidad lo justifica",
+      "Ordinario: cinco días; Extraordinario: hasta diez días, si la complejidad u otra causa justificada lo impide",
+      "Ordinario: siete días; Extraordinario: quince días, previa comunicación al órgano de contratación",
+      "Ordinario: dos días; Extraordinario: cinco días, solo en contratos de obras"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 119.2.a) LCSP establece que en los expedientes urgentes «los distintos órganos que intervengan en la tramitación, que dispondrán de un plazo de cinco días para emitir los respectivos informes o cumplimentar los trámites correspondientes». Si la complejidad u otra causa justificada impide cumplir ese plazo, «el plazo quedará prorrogado hasta diez días»."
+  },
+  {
+    p: "El artículo 119.2.b) de la Ley 9/2017 reduce a la mitad los plazos de licitación, adjudicación y formalización en expedientes urgentes. ¿Qué plazo NO se reduce?",
+    ops: [
+      "El plazo de presentación de proposiciones en procedimiento abierto ordinario",
+      "El plazo de quince días hábiles establecido en el artículo 153.3, como período de espera antes de la formalización del contrato",
+      "El plazo de publicación del anuncio de licitación en el DOUE",
+      "El plazo de envío de invitaciones en procedimientos restringidos"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 119.2.b) LCSP reduce a la mitad los plazos de licitación, adjudicación y formalización, «salvo los siguientes»: 1.º el plazo de quince días hábiles establecido en el art. 153.3 como período de espera (standstill) antes de la formalización; los plazos de presentación de proposiciones en procedimiento abierto para contratos SARA; los plazos en procedimientos restringidos y de licitación con negociación para contratos SARA; los de diálogo competitivo y asociación para la innovación SARA; y los plazos del procedimiento abierto simplificado."
+  },
+  {
+    p: "El artículo 119.2.c) de la Ley 9/2017 establece un plazo máximo para el inicio de la ejecución en contratos urgentes. ¿Cuál es?",
+    ops: [
+      "Quince días desde la formalización",
+      "Un mes contado desde la formalización",
+      "Dos meses desde la adjudicación definitiva",
+      "Diez días hábiles desde la firma del contrato"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 119.2.c) LCSP establece que «el plazo de inicio de la ejecución del contrato no podrá exceder de un mes, contado desde la formalización». Esta limitación busca que la urgencia declarada se traduzca en efectiva celeridad en la ejecución de la prestación."
+  },
+  {
+    p: "El artículo 120.1 de la Ley 9/2017 regula la tramitación de emergencia. ¿Cuáles son los tres supuestos que la justifican?",
+    ops: [
+      "Cortes de suministro eléctrico, inundaciones ordinarias y fallos informáticos de la Administración",
+      "Acontecimientos catastróficos, situaciones que supongan grave peligro, o necesidades que afecten a la defensa nacional",
+      "Huelgas de funcionarios, desabastecimiento de medicamentos y situaciones de alerta sanitaria",
+      "Incendios en edificios públicos, accidentes de tráfico graves y catástrofes naturales menores"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 120.1 LCSP establece que la tramitación de emergencia procede «cuando la Administración tenga que actuar de manera inmediata a causa de: acontecimientos catastróficos, de situaciones que supongan grave peligro o de necesidades que afecten a la defensa nacional». Son tres supuestos tasados de excepcionalidad que justifican la máxima agilización del procedimiento."
+  },
+  {
+    p: "¿Cuál es la principal especialidad de la tramitación de emergencia respecto al expediente de contratación, según el artículo 120.1.a) de la Ley 9/2017?",
+    ops: [
+      "El expediente se tramita en un plazo máximo de cuarenta y ocho horas, con todos los trámites ordinarios",
+      "El órgano de contratación, sin obligación de tramitar expediente de contratación, podrá ordenar la ejecución de lo necesario o contratar libremente su objeto sin sujetarse a los requisitos formales de la Ley, incluso el de la existencia de crédito suficiente",
+      "Se suprime solo el plazo de espera antes de la formalización del contrato, manteniéndose el resto de trámites",
+      "Se simplifica el pliego de cláusulas administrativas, que puede reducirse a una sola página con los elementos esenciales"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 120.1.a) LCSP establece la regla más radical del régimen de emergencia: «el órgano de contratación, sin obligación de tramitar expediente de contratación, podrá ordenar la ejecución de lo necesario para remediar el acontecimiento producido o satisfacer la necesidad sobrevenida, o contratar libremente su objeto, en todo o en parte, sin sujetarse a los requisitos formales establecidos en la presente Ley, incluso el de la existencia de crédito suficiente». Si no hay crédito, se procederá a su dotación posterior conforme a la Ley General Presupuestaria."
+  },
+  {
+    p: "El artículo 120.1.b) de la Ley 9/2017 establece una obligación de comunicación cuando se contrata en emergencia. ¿A quién y en qué plazo?",
+    ops: [
+      "Al Tribunal de Cuentas en el plazo máximo de quince días",
+      "Al Consejo de Ministros en el plazo máximo de treinta días, cuando el contrato haya sido celebrado por la AGE, sus Organismos Autónomos, Entidades Gestoras y Servicios Comunes de la Seguridad Social u otras entidades públicas estatales",
+      "Al Congreso de los Diputados en el plazo máximo de cuarenta y ocho horas",
+      "Al Ministerio de Hacienda en el plazo máximo de diez días hábiles"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 120.1.b) LCSP establece que «si el contrato ha sido celebrado por la Administración General del Estado, sus Organismos Autónomos, Entidades Gestoras y Servicios Comunes de la Seguridad Social o demás entidades públicas estatales, se dará cuenta de dichos acuerdos al Consejo de Ministros en el plazo máximo de treinta días»."
+  },
+  {
+    p: "El artículo 120.1.c) de la Ley 9/2017 establece un límite temporal al inicio de la ejecución en la tramitación de emergencia. ¿Cuál es la consecuencia de superar ese plazo?",
+    ops: [
+      "El contrato queda automáticamente rescindido y debe licitarse de nuevo",
+      "El plazo de inicio de la ejecución no podrá ser superior a un mes desde la adopción del acuerdo; si se excede ese plazo, la contratación requerirá la tramitación de un procedimiento ordinario",
+      "El contratista tiene derecho a una indemnización por demora de la Administración",
+      "El expediente de emergencia caduca y deben aplicarse las normas de tramitación urgente del artículo 119"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 120.1.c) LCSP establece que «el plazo de inicio de la ejecución de las prestaciones no podrá ser superior a un mes, contado desde la adopción del acuerdo previsto en la letra a). Si se excediese este plazo, la contratación de dichas prestaciones requerirá la tramitación de un procedimiento ordinario». La emergencia se circunscribe a la actuación inmediata; para las prestaciones complementarias sin carácter urgente rige la tramitación ordinaria (art. 120.2)."
+  },
+
+  /* ══ PREGUNTAS DE SÍNTESIS Y DISTINCIÓN ══ */
+  {
+    p: "¿Cuál es la diferencia esencial entre el contrato de concesión de obras (art. 14) y el contrato de obras ordinario (art. 13) de la Ley 9/2017?",
+    ops: [
+      "En la concesión de obras, el concesionario no construye nada; solo gestiona la obra ya construida por la Administración",
+      "En el contrato de obras ordinario la Administración paga un precio al contratista una vez ejecutada la obra; en la concesión de obras la contraprestación es el derecho a explotar la obra, lo que implica la transferencia al concesionario de un riesgo operacional (de demanda o de suministro, o ambos)",
+      "No hay diferencia sustancial; ambos tipos contractuales se rigen por las mismas normas de la LCSP",
+      "El contrato de obras ordinario puede incluir la concesión posterior de la obra; la concesión de obras no puede incluir la ejecución previa de la construcción"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El contrato de obras ordinario (art. 13) tiene por objeto la ejecución de una obra a cambio de un precio pagado por la Administración. La concesión de obras (art. 14) añade dos elementos definitorios: la contraprestación al concesionario es el derecho de explotación (con o sin precio complementario) y, crucialmente, ese derecho de explotación debe implicar la transferencia al concesionario de un riesgo operacional (demanda o suministro, o ambos). Si no hay riesgo operacional real, no hay concesión."
+  },
+  {
+    p: "¿En qué se diferencian las categorías de «sector público» (art. 3.1), «Administraciones Públicas» (art. 3.2) y «poderes adjudicadores» (art. 3.3) de la Ley 9/2017?",
+    ops: [
+      "Son tres denominaciones sinónimas que la Ley usa indistintamente para referirse a las mismas entidades",
+      "El sector público es el conjunto más amplio (letras a a l del art. 3.1); las Administraciones Públicas son un subconjunto del sector público (básicamente las letras a, b, c y l, más ciertos consorcios); los poderes adjudicadores incluyen a las Administraciones Públicas, más las fundaciones públicas, Mutuas, organismos de derecho público y sus asociaciones",
+      "El sector público incluye solo la AGE y las CC.AA.; las Administraciones Públicas incluyen además las Entidades Locales; los poderes adjudicadores son las entidades que pueden contratar según la LCSP",
+      "Las tres categorías son idénticas excepto que los «poderes adjudicadores» excluyen las entidades sin personalidad jurídica"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> Existe una relación de inclusión entre las tres categorías: el «sector público» (art. 3.1, letras a a l) es el conjunto más amplio, con doce categorías de entidades. Las «Administraciones Públicas» (art. 3.2) son un subconjunto más restringido: esencialmente las letras a), b), c) y l) del apartado 1, más ciertos consorcios y entidades de derecho público sin financiación de mercado. Los «poderes adjudicadores» (art. 3.3) son un conjunto intermedio: incluyen a las Administraciones Públicas, más las fundaciones públicas, las Mutuas, los organismos de derecho público y sus asociaciones. La distinción importa porque el régimen aplicable a la contratación difiere según la categoría del ente contratante."
+  },
+  {
+    p: "¿Cuál es la diferencia entre la tramitación urgente (art. 119) y la tramitación de emergencia (art. 120) de la Ley 9/2017?",
+    ops: [
+      "La tramitación urgente es para contratos de obras; la de emergencia es para cualquier tipo de contrato",
+      "La tramitación urgente responde a necesidades inaplazables o razones de interés público y sigue el procedimiento ordinario con especialidades (plazos reducidos a la mitad, preferencia en el despacho, inicio de ejecución en un mes desde formalización); la tramitación de emergencia responde a catástrofes, grave peligro o defensa nacional y permite actuar sin expediente, sin formalidades y sin necesidad de crédito suficiente previo",
+      "La tramitación urgente exige siempre declaración del Consejo de Ministros; la de emergencia puede declararla cualquier órgano de contratación",
+      "No hay diferencia sustantiva; ambas denominaciones se refieren al mismo régimen excepcional"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> Son dos regímenes distintos de intensidad creciente. La tramitación urgente (art. 119) opera cuando hay necesidad inaplazable o urgencia de interés público: mantiene el expediente de contratación pero lo agiliza (plazos de la tramitación reducidos a la mitad, preferencia en el despacho con plazos de cinco o diez días para informes, inicio de ejecución en el mes siguiente a la formalización). La tramitación de emergencia (art. 120) opera ante catástrofes, grave peligro o necesidades de defensa nacional: permite actuar sin expediente de contratación, sin sujeción a los requisitos formales de la Ley, incluso sin crédito suficiente, con cuenta al Consejo de Ministros en treinta días e inicio de ejecución en el mes siguiente al acuerdo."
+  },
+  {
+    p: "¿Cuál es la diferencia entre el contrato de servicios (art. 17) y el contrato de concesión de servicios (art. 15) de la Ley 9/2017 en cuanto al riesgo y la contraprestación?",
+    ops: [
+      "En el contrato de servicios la prestación es de hacer; en la concesión de servicios la prestación es de dar. No hay diferencia en cuanto al riesgo",
+      "En el contrato de servicios la Administración paga un precio y asume el riesgo de la demanda del servicio; en la concesión de servicios la contraprestación es el derecho de explotación del servicio, lo que implica la transferencia al concesionario del riesgo operacional (de demanda o suministro). Sin riesgo operacional, no hay concesión",
+      "Solo difieren en el plazo: el contrato de servicios puede ser indefinido; la concesión de servicios tiene un plazo máximo legal",
+      "En la concesión de servicios la Administración siempre paga un precio complementario al concesionario; en el contrato de servicios puede no haber precio si el contratista se financia con ingresos de los usuarios"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> La diferencia fundamental es el riesgo operacional: en el contrato de servicios ordinario (art. 17), la Administración paga un precio al contratista, que no asume riesgo de demanda ni de suministro; si los usuarios no demandan el servicio, la Administración paga igual. En la concesión de servicios (art. 15), la contraprestación es el derecho a explotar el servicio (con o sin precio complementario), y esa explotación «implicará la transferencia al concesionario del riesgo operacional» (art. 15.2). Si no hay transferencia efectiva del riesgo, el contrato no es concesión de servicios sino contrato de servicios ordinario."
+  }
+];
+
+/* ── LÓGICA ── */
+let orden = [], respondidas = 0, aciertos = 0, errores = 0;
+const TOTAL = BANCO.length;
+
+document.getElementById('totalLabel').textContent = '📋 ' + TOTAL + ' preguntas';
+document.getElementById('barraNum').textContent = '0 / ' + TOTAL;
+
+function mezclar(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function actualizarBarra() {
+  document.getElementById('barraFill').style.width = ((respondidas / TOTAL) * 100) + '%';
+  document.getElementById('barraNum').textContent = respondidas + ' / ' + TOTAL;
+  document.getElementById('scoreOk').textContent = '✓ ' + aciertos;
+  document.getElementById('scoreKo').textContent = '✗ ' + errores;
+}
+
+function construirPreguntas() {
+  orden = mezclar([...Array(TOTAL).keys()]);
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '';
+  const letras = ['A', 'B', 'C', 'D'];
+
+  orden.forEach((idx, pos) => {
+    const q = BANCO[idx];
+    const opsOrden = mezclar([0, 1, 2, 3]);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'card-' + pos;
+
+    const numDiv = document.createElement('div');
+    numDiv.className = 'card-num';
+    numDiv.textContent = 'Pregunta ' + (pos + 1);
+
+    const pregDiv = document.createElement('div');
+    pregDiv.className = 'card-pregunta';
+    pregDiv.textContent = q.p;
+
+    const opcionesDiv = document.createElement('div');
+    opcionesDiv.className = 'opciones';
+
+    opsOrden.forEach((opIdx, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opcion';
+      btn.dataset.correcto = (opIdx === q.c) ? '1' : '0';
+      btn.dataset.pos = pos;
+      btn.innerHTML = '<span class="letra">' + letras[i] + '</span><span>' + q.ops[opIdx] + '</span>';
+      btn.addEventListener('click', onOpcionClick);
+      opcionesDiv.appendChild(btn);
+    });
+
+    const expDiv = document.createElement('div');
+    expDiv.className = 'explicacion';
+    expDiv.id = 'exp-' + pos;
+    expDiv.innerHTML = q.exp;
+
+    card.appendChild(numDiv);
+    card.appendChild(pregDiv);
+    card.appendChild(opcionesDiv);
+    card.appendChild(expDiv);
+    main.appendChild(card);
+  });
+
+  const res = document.createElement('div');
+  res.className = 'resultado';
+  res.id = 'resultado';
+  res.innerHTML = `
+    <div class="resultado-eyebrow">Resultado final</div>
+    <h2>Test completado</h2>
+    <div class="resultado-nota"><span id="rNota">-</span><span style="font-size:1.5rem;color:var(--texto-suave)">/10</span></div>
+    <div id="rBadge" class="calif-badge"></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="rOk" style="color:var(--verde)">-</div><div class="stat-lab">Correctas</div></div>
+      <div class="stat"><div class="stat-num" id="rKo" style="color:var(--rojo)">-</div><div class="stat-lab">Erróneas</div></div>
+      <div class="stat"><div class="stat-num" id="rPct">-</div><div class="stat-lab">% Acierto</div></div>
+    </div>
+    <p class="resultado-hint">Revisa las explicaciones en cada pregunta para reforzar los conceptos.</p>
+    <button class="btn btn-naranja" onclick="reiniciar()">🔄 Nuevo intento</button>
+  `;
+  main.appendChild(res);
+}
+
+function onOpcionClick(e) {
+  const btn = e.currentTarget;
+  const pos = parseInt(btn.dataset.pos);
+  const card = document.getElementById('card-' + pos);
+  card.querySelectorAll('.opcion').forEach(b => {
+    b.disabled = true;
+    if (b.dataset.correcto === '1') b.classList.add('correcta');
+    else if (b === btn) b.classList.add('incorrecta');
+  });
+  document.getElementById('exp-' + pos).classList.add('visible');
+  if (btn.dataset.correcto === '1') aciertos++; else errores++;
+  respondidas++;
+  actualizarBarra();
+  if (respondidas === TOTAL) mostrarResultado();
+}
+
+function mostrarResultado() {
+  const nota = ((aciertos / TOTAL) * 10).toFixed(1);
+  const pct = Math.round((aciertos / TOTAL) * 100);
+  let badge = '', color = '';
+  if (pct >= 90)      { badge = '🏆 Sobresaliente'; color = '#166534'; }
+  else if (pct >= 70) { badge = '✅ Notable';        color = '#1d4ed8'; }
+  else if (pct >= 50) { badge = '⚠️ Aprobado';      color = '#92400e'; }
+  else                { badge = '❌ Suspenso';       color = '#991b1b'; }
+  document.getElementById('rNota').textContent = nota;
+  document.getElementById('rOk').textContent = aciertos;
+  document.getElementById('rKo').textContent = errores;
+  document.getElementById('rPct').textContent = pct + '%';
+  const badgeEl = document.getElementById('rBadge');
+  badgeEl.textContent = badge;
+  badgeEl.style.cssText += `;background:${color}22;color:${color};border:1px solid ${color}44`;
+  const res = document.getElementById('resultado');
+  res.classList.add('visible');
+  setTimeout(() => res.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function reiniciar() {
+  respondidas = 0; aciertos = 0; errores = 0;
+  actualizarBarra();
+  construirPreguntas();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+construirPreguntas();
+</script>
+</body>
+</html>
